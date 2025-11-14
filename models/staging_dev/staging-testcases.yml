@@ -22,14 +22,22 @@ models:
         tests:
           - not_null
           - relationships:
-              field: orderid
-              to: ref('stg_orders')
+              arguments:
+                field: orderid
+                to: ref('stg_orders')
 
   - name: stg_shipments
     description: provides shipment datafor the orders delivered
     columns:
       - name: status
-        decription: provides ths status of shipments
         tests:
           - accepted_values:
-              values: ["returned", "replaced", "shipped", "ordered"]
+              arguments:
+                values: ["returned", "replaced", "shipped", "ordered"]
+        config:
+          meta:
+            decription: provides ths status of shipments
+
+  - name: stg_products
+    config:
+      schema: "{{ env_var('DBT_STGSCHEMA_NAME', 'STAGING_DEV') }}"          

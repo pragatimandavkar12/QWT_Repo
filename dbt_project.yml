@@ -35,15 +35,10 @@ vars:
   v_division: "South America"
   dbt_dq_tool_schema: "{{env_var('DBT_AUDITSCHEMA_NAME','AUDITING_DEV')}}"
   #dbt_dq_tool_schema: "AUDITING_DEV"
-  dq_tools_enable_store_test_results: True
+  dq_tools_enable_store_test_results: true
 
 seeds:
-  schema: "{{env_var('DBT_LOOKUPSCHEMA_NAME','LOOKUP_DEV')}}"
-  #schema: lookup_dev
-
-#on-run-start: "grant select on table qwt_dev.auditing_dev.qwt_models_audit to role sysadmin;"
-#on-run-end: "revoke select on table qwt_dev.auditing_dev.qwt_models_audit from role sysadmin"
-
+  +schema: "{{env_var('DBT_LOOKUPSCHEMA_NAME','LOOKUP_DEV')}}"
 on-run-end:
   - "{{ dq_tools.store_test_results(results) }}"
 
@@ -54,9 +49,9 @@ models:
   +post-hook:
     - "update {{ env_var('DBT_AUDITSCHEMA_NAME', 'AUDITING_DEV') }}.qwt_models_audit set endtime = current_timestamp , duration = datediff('second', starttime, current_timestamp()) where modelname = '{{this}}';"
     #- "update auditing_dev.qwt_models_audit set endtime = current_timestamp , duration = datediff('second', starttime, current_timestamp()) where modelname = '{{this}}';"
-  
-  database: "{{env_var('DBT_QWT_DB','QWT_DEV')}}"
-  
   dq_tools:
     #+schema: AUDITING_DEV
     schema: "{{env_var('DBT_AUDITSCHEMA_NAME','AUDITING_DEV')}}"
+  +database: "{{env_var('DBT_QWT_DB','QWT_DEV')}}"
+flags:
+  require_generic_test_arguments_property: true
