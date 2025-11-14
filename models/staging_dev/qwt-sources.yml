@@ -1,0 +1,20 @@
+version: 2
+ 
+sources:
+  - name: qwt_project # This is the *source name* used in the {{ source() }} function
+    database: "{{env_var('DBT_QWT_DB','QWT_DEV')}}"
+          #qwt_dev # This specifies the Snowflake database name
+    schema: "{{env_var('DBT_RAW_SCHEMA','QWT_RAW')}}" 
+          #qwt_raw
+ 
+    tables:
+      - name: raw_customers_old
+      - name: raw_products
+      - name: raw_orders_old
+      - name: raw_orderdetails
+      - name: raw_employees
+      - name: raw_offices
+      - name: raw_shipments
+      - name: raw_suppliers
+      - name: raw_customers
+      - name: raw_orders
