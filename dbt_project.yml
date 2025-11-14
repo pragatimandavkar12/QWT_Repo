@@ -54,7 +54,9 @@ models:
   +post-hook:
     - "update {{ env_var('DBT_AUDITSCHEMA_NAME', 'AUDITING_DEV') }}.qwt_models_audit set endtime = current_timestamp , duration = datediff('second', starttime, current_timestamp()) where modelname = '{{this}}';"
     #- "update auditing_dev.qwt_models_audit set endtime = current_timestamp , duration = datediff('second', starttime, current_timestamp()) where modelname = '{{this}}';"
-
+  
+  database: "{{env_var('DBT_QWT_DB','QWT_DEV')}}"
+  
   dq_tools:
     #+schema: AUDITING_DEV
     schema: "{{env_var('DBT_AUDITSCHEMA_NAME','AUDITING_DEV')}}"
