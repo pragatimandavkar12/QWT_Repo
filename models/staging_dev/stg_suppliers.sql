@@ -1,4 +1,4 @@
-{{config(materialized = 'table', schema = env_var('DBT_STGSCHEMA_NAME','STAGING_DEV'),)}}
+{{config(materialized = 'table', schema = env_var('DBT_STGSCHEMA_NAME','STAGING_DEV'))}}
 
 select 
 get(xmlget(suppliersinfo, 'SupplierID'),'$') as SupplierID,
