@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: stg_customers
+    config:
+      schema: "{{env_var('DBT_STGSCHEMA_NAME','STAGING_DEV')}}"
+    description: "{{ doc('stg_customers_desc') }}"
+           #provides master customer data for sales data mart
+    columns:
+      - name: customerid
+        description: uniquly identifies each customer in customers master table
+        tests:
+          - unique
+          - not_null
+          - is_even
+
+  - name: stg_orderdetails
+    description: provides ordersfor the qwt with important key metrics
+    columns:
+      - name: orderid
+        description: each orderid is define with orderid and lineno
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                field: orderid
+                to: ref('stg_orders')
+
+  - name: stg_shipments
+    description: provides shipment datafor the orders delivered
+    columns:
+      - name: status
+        tests:
+          - accepted_values:
+              arguments:
+                values: ["returned", "replaced", "shipped", "ordered"]
+        config:
+          meta:
+            decription: provides ths status of shipments
+
+  - name: stg_products
+    config:
+      schema: "{{ env_var('DBT_STGSCHEMA_NAME', 'STAGING_DEV') }}"          
